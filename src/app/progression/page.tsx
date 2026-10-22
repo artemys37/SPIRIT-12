@@ -37,7 +37,7 @@ export default function ProgressionPage() {
 
         <div className="bg-white rounded-xl border shadow-sm p-6">
           <h2 className="text-lg font-semibold mb-4">Agent Progression</h2>
-          <p className="text-slate-600 mb-4">L'agent analysera tes indicateurs réels pour te proposer des ajustements bienveillants.</p>
+          <p className="text-slate-600 mb-4">L&apos;agent analysera tes indicateurs réels pour te proposer des ajustements bienveillants.</p>
           <button className="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800">Demander un bilan (Sprint 9)</button>
         </div>
       </main>

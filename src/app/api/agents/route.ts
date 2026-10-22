@@ -1,11 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { orchestrator } from '@/lib/agents/orchestrator';
-import { AgentRole } from '@/lib/ai/openai';
-import { z } from 'zod';
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import { orchestrator } from "@/lib/agents/orchestrator";
+import { checkGuardrails } from "@/lib/agents/guardrails";
+
+export const runtime = "nodejs";
 
 const RequestSchema = z.object({
-  role: z.enum(['profil', 'enseignement', 'planificateur', 'coach']),
-  input: z.any()
+  role: z.enum([
+    "profil",
+    "enseignement",
+    "planificateur",
+    "coach",
+    "progression",
+    "controle",
+  ]),
+  input: z.unknown(),
 });
 
 export async function POST(req: NextRequest) {
@@ -13,26 +22,43 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { role, input } = RequestSchema.parse(body);
 
-    // TODO: Add auth check
-    // TODO: Add rate limiting
-    // TODO: Add logging to ai_runs
-    
-    const result = await orchestrator.route(role as AgentRole, input);
-    
+    if (!orchestrator.isAuthorized(role)) {
+      return NextResponse.json(
+        { success: false, error: "Rôle d'agent non autorisé" },
+        { status: 403 }
+      );
+    }
+
+    const result = await orchestrator.route(role, input);
+
+    const report = checkGuardrails(result);
+
+    if (!report.approved) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Sortie refusée par les règles de sécurité",
+          blocked: true,
+          findings: report.findings,
+        },
+        { status: 422 }
+      );
+    }
+
     return NextResponse.json({ success: true, data: result });
   } catch (error) {
-    console.error('Agent API error:', error);
-    
+    console.error("Agent API error:", error);
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { success: false, error: 'Invalid request' },
+        { success: false, error: "Requête invalide" },
         { status: 400 }
       );
     }
-    
+
     return NextResponse.json(
-      { success: false, error: 'Service temporarily unavailable' },
-      { status: 500 }
+      { success: false, error: "Service temporairement indisponible" },
+      { status: 503 }
     );
   }
 }

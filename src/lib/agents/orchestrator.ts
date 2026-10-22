@@ -2,22 +2,56 @@ import { ProfilAgent } from './profil-agent';
 import { EnseignementAgent } from './enseignement-agent';
 import { PlanificateurAgent } from './planificateur-agent';
 import { CoachAgent } from './coach-agent';
-import { AgentRole } from '@/lib/ai/openai';
+import { ProgressionAgent } from './progression-agent';
+import { ControleAgent } from './controle-agent';
+import { BaseAgent } from './base-agent';
+
+const agentRegistry = {
+  profil: ProfilAgent,
+  enseignement: EnseignementAgent,
+  planificateur: PlanificateurAgent,
+  coach: CoachAgent,
+  progression: ProgressionAgent,
+  controle: ControleAgent,
+};
+
+export type RoutedRole = keyof typeof agentRegistry;
+
+const AGENT_WHITELIST: RoutedRole[] = [
+  'profil',
+  'enseignement',
+  'planificateur',
+  'coach',
+  'progression',
+  'controle',
+];
 
 export class Orchestrator {
-  private agents = {
-    profil: new ProfilAgent(),
-    enseignement: new EnseignementAgent(),
-    planificateur: new PlanificateurAgent(),
-    coach: new CoachAgent(),
-  };
+  private agents: Record<RoutedRole, BaseAgent>;
 
-  private whitelist: AgentRole[] = ['profil', 'enseignement', 'planificateur', 'coach'];
+  private whitelist: RoutedRole[] = AGENT_WHITELIST;
+
   private maxTurns = 3;
+
   private maxTokensBudget = 5000;
 
-  async route(role: AgentRole, input: unknown) {
-    if (!this.whitelist.includes(role)) {
+  constructor() {
+    this.agents = {
+      profil: new ProfilAgent(),
+      enseignement: new EnseignementAgent(),
+      planificateur: new PlanificateurAgent(),
+      coach: new CoachAgent(),
+      progression: new ProgressionAgent(),
+      controle: new ControleAgent(),
+    };
+  }
+
+  isAuthorized(role: string): role is RoutedRole {
+    return this.whitelist.includes(role as RoutedRole);
+  }
+
+  async route(role: RoutedRole, input: unknown) {
+    if (!this.isAuthorized(role)) {
       throw new Error(`Agent role ${role} not authorized`);
     }
 
@@ -26,11 +60,14 @@ export class Orchestrator {
       throw new Error(`Agent ${role} not found`);
     }
 
-    // Log metadata only (no full prompts)
-    console.log(`[ORCHESTRATOR] Calling agent: ${role}`, { timestamp: new Date().toISOString() });
-    
+    console.log(`[ORCHESTRATOR] Calling agent: ${role}`, {
+      timestamp: new Date().toISOString(),
+    });
+
     try {
-      return await agent.execute(typeof input === 'string' ? input : JSON.stringify(input));
+      return await agent.execute(
+        typeof input === 'string' ? input : JSON.stringify(input)
+      );
     } catch (error) {
       console.error(`[ORCHESTRATOR] Error with agent ${role}:`, error);
       return this.getFallback();
@@ -39,12 +76,19 @@ export class Orchestrator {
 
   private getFallback() {
     return {
-      summary: "Le service d'accompagnement est temporairement indisponible.",
-      suggestions: ["Reprends ta mission du jour si elle existe", "Consulte la bibliothèque des lois pour t'inspirer"],
+      summary:
+        "Le service d'accompagnement est temporairement indisponible. Tes données sont intactes.",
+      suggestions: [
+        'Reprends ta mission du jour si elle existe',
+        'Consulte la bibliothèque des lois pour t inspires',
+        'Reviens plus tard, le service devrait être rétabli',
+      ],
       references: [],
-      warnings: [],
+      warnings: [
+        "Aucun accompagnement IA n'a pu être généré pour le moment",
+      ],
       actions: [],
-      confidence: 'low' as const
+      confidence: 'low' as const,
     };
   }
 }

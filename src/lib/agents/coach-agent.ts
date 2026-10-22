@@ -1,5 +1,5 @@
 import { BaseAgent } from './base-agent';
-import { CoachInputSchema } from '@/lib/validation/agent-schemas';
+import { CoachAgentInputSchema } from '@/lib/validation/agent-schemas';
 
 export class CoachAgent extends BaseAgent {
   role = 'coach';
@@ -16,7 +16,7 @@ Règles:
 - Ne jamais blâmer pour les jours manqués - proposer une reprise douce`;
 
   async coach(input: unknown) {
-    const validated = CoachInputSchema.parse(input);
+    const validated = CoachAgentInputSchema.parse(input);
     
     const userMessage = `
 Question: ${validated.question}

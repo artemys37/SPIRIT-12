@@ -35,7 +35,7 @@ export default function DashboardPage() {
           </div>
           <div className="p-6 bg-white rounded-xl border shadow-sm">
             <h3 className="font-semibold mb-2">Journal</h3>
-            <p className="text-slate-600 text-sm mb-4">Aucune entrée aujourd'hui</p>
+            <p className="text-slate-600 text-sm mb-4">Aucune entrée aujourd&apos;hui</p>
             <Link href="/journal" className="text-slate-900 font-medium text-sm">Écrire dans mon journal →</Link>
           </div>
         </div>

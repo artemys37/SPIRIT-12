@@ -20,7 +20,7 @@ export default function ProfilPage() {
           <h2 className="text-lg font-semibold mb-4">Informations personnelles</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Nom d'affichage</label>
+              <label className="block text-sm font-medium mb-2">Nom d&apos;affichage</label>
               <input type="text" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900" />
             </div>
             <div>
