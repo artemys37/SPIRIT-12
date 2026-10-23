@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { AppShell, PageHeader } from "@/components/layout/app-shell";
 
 export default function JournalPage() {

@@ -6,16 +6,13 @@ import { ProgressionAgent } from './progression-agent';
 import { ControleAgent } from './controle-agent';
 import { BaseAgent } from './base-agent';
 
-const agentRegistry = {
-  profil: ProfilAgent,
-  enseignement: EnseignementAgent,
-  planificateur: PlanificateurAgent,
-  coach: CoachAgent,
-  progression: ProgressionAgent,
-  controle: ControleAgent,
-};
-
-export type RoutedRole = keyof typeof agentRegistry;
+export type RoutedRole =
+  | 'profil'
+  | 'enseignement'
+  | 'planificateur'
+  | 'coach'
+  | 'progression'
+  | 'controle';
 
 const AGENT_WHITELIST: RoutedRole[] = [
   'profil',
