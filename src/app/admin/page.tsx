@@ -1,40 +1,102 @@
 import Link from "next/link";
+import { AppShell, PageHeader } from "@/components/layout/app-shell";
+
+const ADMIN_SECTIONS = [
+  {
+    href: "/admin/contenu",
+    title: "Contenu",
+    description: "Rédiger, prévisualiser, publier et archiver les lois et leçons.",
+    status: "À configurer",
+  },
+  {
+    href: "/admin/utilisateurs",
+    title: "Utilisateurs",
+    description: "Consulter les comptes et les rôles, sans accès aux journaux privés.",
+    status: "À configurer",
+  },
+  {
+    href: "/admin/metriques",
+    title: "Métriques",
+    description: "Parcours actifs, missions complétées, erreurs et latence IA.",
+    status: "À configurer",
+  },
+  {
+    href: "/admin/taches",
+    title: "Tâches planifiées",
+    description: "Statut des rappels et des bilans, avec reprise sur échec.",
+    status: "À configurer",
+  },
+];
 
 export default function AdminPage() {
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-2xl font-bold text-slate-900">Administration SPIRIT 12</h1>
-          <p className="text-slate-600 mt-1">Accès réservé aux administrateurs</p>
-        </div>
-      </header>
+    <AppShell>
+      <PageHeader
+        title="Administration"
+        subtitle="Gestion des contenus, des utilisateurs, des métriques et des coûts. Les routes sont protégées côté serveur et les journaux personnels ne sont jamais exposés."
+        back={{ href: "/dashboard", label: "Tableau de bord" }}
+      />
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="p-6 bg-white rounded-xl border shadow-sm">
-            <h2 className="font-semibold mb-2">Contenu</h2>
-            <p className="text-slate-600 text-sm mb-4">Gérer les 12 lois et leçons</p>
-            <Link href="/admin/contenu" className="text-slate-900 font-medium text-sm">Gérer →</Link>
-          </div>
-          <div className="p-6 bg-white rounded-xl border shadow-sm">
-            <h2 className="font-semibold mb-2">Utilisateurs</h2>
-            <p className="text-slate-600 text-sm mb-4">Liste et gestion</p>
-            <Link href="/admin/utilisateurs" className="text-slate-900 font-medium text-sm">Gérer →</Link>
-          </div>
-          <div className="p-6 bg-white rounded-xl border shadow-sm">
-            <h2 className="font-semibold mb-2">Métriques</h2>
-            <p className="text-slate-600 text-sm mb-4">Parcours, missions, IA</p>
-            <span className="text-slate-400 text-sm">À venir</span>
-          </div>
-          <div className="p-6 bg-white rounded-xl border shadow-sm">
-            <h2 className="font-semibold mb-2">Tâches planifiées</h2>
-            <p className="text-slate-600 text-sm mb-4">Statut et logs</p>
-            <span className="text-slate-400 text-sm">À venir</span>
-          </div>
-        </div>
-        <p className="text-sm text-slate-500 mt-6">Routes admin protégées côté serveur (Sprint 11)</p>
-      </main>
-    </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {ADMIN_SECTIONS.map((section) => (
+          <Link
+            key={section.href}
+            href={section.href}
+            className="card group p-6 transition-shadow hover:shadow-md"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <h2 className="text-lg font-semibold text-slate-900 group-hover:text-brand-700">
+                {section.title}
+              </h2>
+              <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-500">
+                {section.status}
+              </span>
+            </div>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600">
+              {section.description}
+            </p>
+          </Link>
+        ))}
+      </div>
+
+      <section className="card mt-6 p-6">
+        <h2 className="text-lg font-semibold text-slate-900">
+          Principes de l&apos;espace d&apos;administration
+        </h2>
+        <ul className="mt-4 space-y-2.5 text-sm text-slate-600">
+          <li className="flex gap-2">
+            <span aria-hidden className="text-brand-600">
+              ◆
+            </span>
+            <span>Publication des contenus réservée à un administrateur humain.</span>
+          </li>
+          <li className="flex gap-2">
+            <span aria-hidden className="text-brand-600">
+              ◆
+            </span>
+            <span>
+              Les métriques sont agrégées et ne révèlent aucun journal personnel.
+            </span>
+          </li>
+          <li className="flex gap-2">
+            <span aria-hidden className="text-brand-600">
+              ◆
+            </span>
+            <span>
+              Les quotas et limites d&apos;usage sont appliqués côté serveur.
+            </span>
+          </li>
+          <li className="flex gap-2">
+            <span aria-hidden className="text-brand-600">
+              ◆
+            </span>
+            <span>
+              Les journaux techniques masquent les données personnelles et les
+              secrets.
+            </span>
+          </li>
+        </ul>
+      </section>
+    </AppShell>
   );
 }

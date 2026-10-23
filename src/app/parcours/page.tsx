@@ -1,72 +1,140 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
+import { AppShell, PageHeader } from "@/components/layout/app-shell";
 
 export default function ParcoursPage() {
-  const [duration, setDuration] = useState(30);
-  const [goal, setGoal] = useState("");
-  
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Link href="/dashboard" className="text-slate-600 hover:text-slate-900 mb-2 inline-block">← Tableau de bord</Link>
-          <h1 className="text-2xl font-bold text-slate-900">Mon parcours</h1>
-        </div>
-      </header>
+    <AppShell active="/parcours">
+      <PageHeader
+        title="Mon parcours"
+        subtitle="Construisez un programme sur 21, 30, 60, 90 ou 180 jours, calibré sur vos objectifs et le temps dont vous disposez réellement."
+        back={{ href: "/dashboard", label: "Tableau de bord" }}
+      />
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
-        <div className="bg-white rounded-xl border shadow-sm p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4">Créer mon parcours personnalisé</h2>
-          
-          <div className="space-y-4">
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="card p-6 lg:col-span-2">
+          <h2 className="text-lg font-semibold text-slate-900">
+            Créer mon parcours
+          </h2>
+          <p className="mt-1 text-sm text-slate-600">
+            Le parcours est généré par des règles déterministes, puis relu par
+            l&apos;agent Planificateur.
+          </p>
+
+          <div className="mt-6 space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2">Quel est ton objectif ?</label>
-              <input 
-                type="text" 
-                value={goal}
-                onChange={(e) => setGoal(e.target.value)}
-                placeholder="Ex: Mieux gérer mon stress, développer ma sérénité..."
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900"
+              <label
+                htmlFor="goal"
+                className="block text-sm font-medium text-slate-700"
+              >
+                Quel est ton objectif principal ?
+              </label>
+              <input
+                id="goal"
+                type="text"
+                placeholder="Ex. Mieux gérer mon stress au quotidien"
+                className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200"
               />
+              <p className="mt-1.5 text-xs text-slate-500">
+                Utilisez un indicateur mesurable si possible : cela rendra vos
+                bilans plus utiles.
+              </p>
             </div>
-            
-            <div>
-              <label className="block text-sm font-medium mb-2">Durée du parcours</label>
-              <div className="grid grid-cols-5 gap-2">
-                {[21, 30, 60, 90, 180].map((d) => (
+
+            <fieldset>
+              <legend className="text-sm font-medium text-slate-700">
+                Durée du parcours
+              </legend>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {[21, 30, 60, 90, 180].map((duration) => (
                   <button
-                    key={d}
-                    onClick={() => setDuration(d)}
-                    className={`px-4 py-2 rounded-lg border ${duration === d ? 'bg-slate-900 text-white border-slate-900' : 'bg-white hover:bg-slate-50'}`}
+                    key={duration}
+                    type="button"
+                    className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-brand-400 hover:bg-brand-50 hover:text-brand-700"
                   >
-                    {d} jours
+                    {duration} jours
                   </button>
                 ))}
               </div>
-            </div>
-            
+            </fieldset>
+
             <div>
-              <label className="block text-sm font-medium mb-2">Temps disponible par jour</label>
-              <select className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900">
-                <option value="5">5-10 minutes</option>
-                <option value="10">10-15 minutes</option>
-                <option value="20">15-20 minutes</option>
-                <option value="30">20-30 minutes</option>
+              <label
+                htmlFor="duration-select"
+                className="block text-sm font-medium text-slate-700"
+              >
+                Ou choisissez une durée personnalisée
+              </label>
+              <select
+                id="duration-select"
+                className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200"
+              >
+                <option value="">Sélectionner une durée</option>
+                <option value="21">21 jours</option>
+                <option value="30">30 jours</option>
+                <option value="60">60 jours</option>
+                <option value="90">90 jours</option>
+                <option value="180">180 jours</option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                htmlFor="time"
+                className="block text-sm font-medium text-slate-700"
+              >
+                Temps disponible chaque jour
+              </label>
+              <select
+                id="time"
+                className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200"
+              >
+                <option value="5">5 minutes</option>
+                <option value="10">10 minutes</option>
+                <option value="15">15 minutes</option>
+                <option value="20">20 minutes</option>
+                <option value="30">30 minutes</option>
+                <option value="45">45 minutes</option>
               </select>
             </div>
           </div>
-          
-          <button className="mt-6 w-full px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800">
-            Générer mon parcours (Sprint 5)
+
+          <button
+            type="button"
+            disabled
+            className="btn-primary mt-8 w-full cursor-not-allowed opacity-60"
+          >
+            Générer mon parcours — disponible après configuration Supabase
           </button>
         </div>
-        
-        <p className="text-sm text-slate-600 text-center">
-          Le parcours sera généré par des règles déterministes, sans promesse de résultat.
-        </p>
-      </main>
-    </div>
+
+        <div className="space-y-6">
+          <div className="card p-6">
+            <h2 className="text-lg font-semibold text-slate-900">
+              Vos parcours
+            </h2>
+            <p className="mt-2 text-sm text-slate-600">
+              Aucun parcours actif. Le parcours créé apparaîtra ici avec sa
+              progression.
+            </p>
+          </div>
+
+          <div className="card p-6">
+            <h2 className="text-base font-semibold text-slate-900">
+              Ce que le parcours garantit
+            </h2>
+            <ul className="mt-3 space-y-2 text-sm text-slate-600">
+              <li>✓ Une durée et un objectif clairement définis</li>
+              <li>✓ Une charge quotidienne qui respecte votre temps</li>
+              <li>✓ Des jalons et des indicateurs observables</li>
+              <li>✓ La possibilité de suspendre, reprendre ou arrêter</li>
+            </ul>
+            <p className="mt-4 border-t border-slate-200 pt-4 text-xs text-slate-500">
+              Aucun parcours ne garantit un résultat. L&apos;accompagnement propose
+              des actions, vous décidez.
+            </p>
+          </div>
+        </div>
+      </div>
+    </AppShell>
   );
 }

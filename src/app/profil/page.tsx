@@ -1,56 +1,195 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
+import { AppShell, PageHeader } from "@/components/layout/app-shell";
 
 export default function ProfilPage() {
-  const [timezone, setTimezone] = useState("Europe/Paris");
-  
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Link href="/dashboard" className="text-slate-600 hover:text-slate-900 mb-2 inline-block">← Tableau de bord</Link>
-          <h1 className="text-2xl font-bold text-slate-900">Mon profil</h1>
-        </div>
-      </header>
+    <AppShell active="/profil">
+      <PageHeader
+        title="Mon profil"
+        subtitle="Vos informations, vos préférences et le contrôle sur vos données."
+        back={{ href: "/dashboard", label: "Tableau de bord" }}
+      />
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl space-y-6">
-        <div className="bg-white rounded-xl border shadow-sm p-6">
-          <h2 className="text-lg font-semibold mb-4">Informations personnelles</h2>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Nom d&apos;affichage</label>
-              <input type="text" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900" />
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="space-y-6 lg:col-span-2">
+          <div className="card p-6">
+            <h2 className="text-lg font-semibold text-slate-900">
+              Informations personnelles
+            </h2>
+            <div className="mt-5 space-y-5">
+              <div>
+                <label
+                  htmlFor="display-name"
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  Nom d&apos;affichage
+                </label>
+                <input
+                  id="display-name"
+                  type="text"
+                  disabled
+                  placeholder="Facultatif"
+                  className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200 disabled:cursor-not-allowed disabled:bg-slate-50"
+                />
+              </div>
+
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="timezone"
+                    className="block text-sm font-medium text-slate-700"
+                  >
+                    Fuseau horaire
+                  </label>
+                  <select
+                    id="timezone"
+                    disabled
+                    className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200 disabled:cursor-not-allowed disabled:bg-slate-50"
+                  >
+                    <option>Europe/Paris</option>
+                    <option>Europe/London</option>
+                    <option>America/New_York</option>
+                    <option>Asia/Tokyo</option>
+                  </select>
+                  <p className="mt-1.5 text-xs text-slate-500">
+                    Les missions et rappels utilisent ce fuseau.
+                  </p>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="language"
+                    className="block text-sm font-medium text-slate-700"
+                  >
+                    Langue
+                  </label>
+                  <select
+                    id="language"
+                    disabled
+                    className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200 disabled:cursor-not-allowed disabled:bg-slate-50"
+                  >
+                    <option>Français</option>
+                    <option>English</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="time-available"
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  Temps disponible par jour
+                </label>
+                <select
+                  id="time-available"
+                  disabled
+                  className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200 disabled:cursor-not-allowed disabled:bg-slate-50"
+                >
+                  <option>5 minutes</option>
+                  <option>10 minutes</option>
+                  <option>15 minutes</option>
+                  <option>20 minutes</option>
+                  <option>30 minutes</option>
+                  <option>45 minutes</option>
+                </select>
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">Fuseau horaire</label>
-              <select value={timezone} onChange={(e) => setTimezone(e.target.value)} className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900">
-                <option value="Europe/Paris">Europe/Paris</option>
-                <option value="Europe/London">Europe/London</option>
-                <option value="America/New_York">America/New_York</option>
-                <option value="Asia/Tokyo">Asia/Tokyo</option>
-              </select>
+
+            <button
+              type="button"
+              disabled
+              className="btn-primary mt-6 cursor-not-allowed opacity-60"
+            >
+              Enregistrer les modifications
+            </button>
+          </div>
+
+          <div className="card p-6">
+            <h2 className="text-lg font-semibold text-slate-900">
+              Notifications
+            </h2>
+            <p className="mt-1 text-sm text-slate-600">
+              Les rappels sont non culpabilisants et respectent vos périodes
+              silencieuses.
+            </p>
+            <div className="mt-5 space-y-3">
+              {[
+                "Rappel de mission quotidienne",
+                "Bilan hebdomadaire",
+                "Messages de l'agent Coach",
+              ].map((label) => (
+                <label
+                  key={label}
+                  className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 px-4 py-3"
+                >
+                  <span className="text-sm text-slate-700">{label}</span>
+                  <input
+                    type="checkbox"
+                    disabled
+                    className="h-4 w-4 rounded border-slate-300 text-brand-600 disabled:cursor-not-allowed"
+                  />
+                </label>
+              ))}
             </div>
           </div>
-          <button className="mt-4 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800">Enregistrer</button>
         </div>
 
-        <div className="bg-white rounded-xl border shadow-sm p-6">
-          <h2 className="text-lg font-semibold mb-4">Mes données (RGPD)</h2>
-          <div className="space-y-3">
-            <button className="w-full text-left px-4 py-3 border rounded-lg hover:bg-slate-50">
-              <div className="font-medium">Exporter mes données</div>
-              <div className="text-sm text-slate-600">Télécharger toutes mes données au format JSON</div>
-            </button>
-            <button className="w-full text-left px-4 py-3 border border-red-200 rounded-lg hover:bg-red-50">
-              <div className="font-medium text-red-900">Supprimer mon compte</div>
-              <div className="text-sm text-red-700">Suppression définitive de toutes mes données</div>
-            </button>
+        <div className="space-y-6">
+          <div className="card p-6">
+            <h2 className="text-base font-semibold text-slate-900">
+              Mes données
+            </h2>
+            <p className="mt-2 text-sm text-slate-600">
+              Vous gardez le contrôle sur vos données personnelles.
+            </p>
+
+            <div className="mt-4 space-y-3">
+              <button
+                type="button"
+                disabled
+                className="w-full rounded-lg border border-slate-300 px-4 py-3 text-left transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <span className="block text-sm font-medium text-slate-900">
+                  Exporter mes données
+                </span>
+                <span className="block text-xs text-slate-600">
+                  Toutes vos données au format JSON
+                </span>
+              </button>
+
+              <button
+                type="button"
+                disabled
+                className="w-full rounded-lg border border-red-200 px-4 py-3 text-left transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <span className="block text-sm font-medium text-red-900">
+                  Supprimer mon compte
+                </span>
+                <span className="block text-xs text-red-700">
+                  Suppression définitive et authentifiée
+                </span>
+              </button>
+            </div>
+
+            <p className="mt-4 border-t border-slate-200 pt-4 text-xs text-slate-500">
+              Conformément au RGPD : export, suppression, durée de conservation
+              définie et documentation des fournisseurs tiers.
+            </p>
           </div>
-          <p className="text-xs text-slate-500 mt-4">Conformément au RGPD - Export et suppression disponibles (Sprint 12)</p>
+
+          <div className="card p-6">
+            <h2 className="text-base font-semibold text-slate-900">
+              Usage de l&apos;IA
+            </h2>
+            <p className="mt-2 text-sm text-slate-600">
+              Les requêtes IA sont envoyées côté serveur à un fournisseur
+              d&apos;IA. Seules les informations nécessaires au rôle de l&apos;agent
+              lui sont transmises, jamais votre journal ni vos notes privées.
+            </p>
+          </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </AppShell>
   );
 }

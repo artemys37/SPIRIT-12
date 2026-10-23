@@ -1,45 +1,121 @@
 import Link from "next/link";
+import { AppShell, PageHeader } from "@/components/layout/app-shell";
 
-const laws = [
-  { slug: "loi-1", title: "Loi 1 - La Responsabilité", summary: "Nous sommes responsables de notre réalité." },
-  { slug: "loi-2", title: "Loi 2 - L'Attraction", summary: "Ce sur quoi nous nous concentrons se manifeste." },
-  { slug: "loi-3", title: "Loi 3 - L'Action", summary: "L'intention doit s'accompagner d'action." },
-  { slug: "loi-4", title: "Loi 4 - Le Présent", summary: "Le pouvoir est dans l'instant présent." },
-  { slug: "loi-5", title: "Loi 5 - L'Équilibre", summary: "Tout dans l'univers tend vers l'équilibre." },
-  { slug: "loi-6", title: "Loi 6 - Le Don", summary: "Donner ouvre la voie à recevoir." },
-  { slug: "loi-7", title: "Loi 7 - Le Karma", summary: "Chaque action a sa conséquence." },
-  { slug: "loi-8", title: "Loi 8 - Le Changement", summary: "Le changement est la seule constante." },
-  { slug: "loi-9", title: "Loi 9 - L'Unité", summary: "Tout est interconnecté." },
-  { slug: "loi-10", title: "Loi 10 - Le Pardon", summary: "Le pardon libère celui qui pardonne." },
-  { slug: "loi-11", title: "Loi 11 - La Foi", summary: "La foi précède la manifestation." },
-  { slug: "loi-12", title: "Loi 12 - L'Amour", summary: "L'amour est la force la plus puissante." },
+const LAWS = [
+  {
+    slug: "loi-1",
+    title: "La Responsabilité",
+    summary:
+      "Nous sommes responsables de notre réalité, et non victimes de nos circumstances.",
+  },
+  {
+    slug: "loi-2",
+    title: "L'Attraction",
+    summary:
+      "Ce sur quoi nous concentrons notre attention prend forme dans notre quotidien.",
+  },
+  {
+    slug: "loi-3",
+    title: "L'Action",
+    summary:
+      "L'intention devient réelle lorsqu'elle s'accompagne d'un geste concret.",
+  },
+  {
+    slug: "loi-4",
+    title: "Le Présent",
+    summary:
+      "Le pouvoir d'agir se trouve dans l'instant présent, pas dans l'attente.",
+  },
+  {
+    slug: "loi-5",
+    title: "L'Équilibre",
+    summary:
+      "Tout tend vers un équilibre ; ce que l'on reçoit et ce que l'on donne s'ajustent.",
+  },
+  {
+    slug: "loi-6",
+    title: "Le Don",
+    summary:
+      "Donner ouvre la voie à recevoir, et libère de l'attachement.",
+  },
+  {
+    slug: "loi-7",
+    title: "Le Karma",
+    summary:
+      "Chaque action porte ses conséquences, avec le temps qui lui convient.",
+  },
+  {
+    slug: "loi-8",
+    title: "Le Changement",
+    summary:
+      "Le changement est la seule constante ; s'adapter est une compétence.",
+  },
+  {
+    slug: "loi-9",
+    title: "L'Unité",
+    summary:
+      "Ce que nous faisons à un endroit se répercute ailleurs : tout est interconnecté.",
+  },
+  {
+    slug: "loi-10",
+    title: "Le Pardon",
+    summary:
+      "Le pardon libère celui qui pardonne autant que celui qui est pardonné.",
+  },
+  {
+    slug: "loi-11",
+    title: "La Foi",
+    summary:
+      "La foi précède la manifestation : elle ouvre un passage avant la preuve.",
+  },
+  {
+    slug: "loi-12",
+    title: "L'Amour",
+    summary:
+      "L'amour est la force la plus puissante, la plus difficile et la plus/source de lumière.",
+  },
 ];
 
 export default function LoisPage() {
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-slate-900">Les 12 Lois Spirituelles</h1>
-          <p className="text-slate-600 mt-2">Étudiez et appliquez ces principes dans votre vie quotidienne</p>
-        </div>
-      </header>
+    <AppShell active="/lois">
+      <PageHeader
+        title="Les 12 lois spirituelles"
+        subtitle="Un cadre philosophique et traditionnel pour structurer sa pratique quotidienne. La formulation varie selon les traditions : chaque leçon indique la source retenue."
+        back={{ href: "/dashboard", label: "Tableau de bord" }}
+      />
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {laws.map((law) => (
-            <Link
-              key={law.slug}
-              href={`/lois/${law.slug}`}
-              className="block p-6 bg-white rounded-xl border shadow-sm hover:shadow-md transition-shadow"
-            >
-              <h2 className="text-xl font-semibold text-slate-900 mb-2">{law.title}</h2>
-              <p className="text-slate-600">{law.summary}</p>
-              <span className="inline-block mt-4 text-slate-900 font-medium">Découvrir →</span>
-            </Link>
-          ))}
-        </div>
-      </main>
-    </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {LAWS.map((law, index) => (
+          <Link
+            key={law.slug}
+            href={`/lois/${law.slug}`}
+            className="card group flex flex-col p-5 transition-shadow hover:shadow-md"
+          >
+            <span className="text-xs font-bold tracking-widest text-brand-600">
+              LOI {String(index + 1).padStart(2, "0")}
+            </span>
+            <h2 className="mt-2 text-lg font-semibold text-slate-900 group-hover:text-brand-700">
+              {law.title}
+            </h2>
+            <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">
+              {law.summary}
+            </p>
+            <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-600">
+              Ouvrir
+              <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
+                →
+              </span>
+            </span>
+          </Link>
+        ))}
+      </div>
+
+      <p className="mt-8 rounded-xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-600">
+        Ces enseignements ne constituent pas des lois scientifiques ni un
+        diagnostic. Ils sont proposés comme une grille de lecture personnelle
+        pour transformer des principes en actions observables.
+      </p>
+    </AppShell>
   );
 }
